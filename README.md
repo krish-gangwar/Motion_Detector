@@ -7,8 +7,8 @@ The trivial idea is to compute the difference between two frames apply a thresho
 
 ## Requirements ##
 
- *X86, X86_64, ARMv7 or ARMv8 version of Ubuntu 16.04 or Debian 8 (will most likely work on other Linux based operating systems as well)
- *Python 3.4 or above
- *Camera or Video file
- *Install OpenCV or pip install opencv-python
- *Install Bokeh library or pip install bokeh
+*X86, X86_64, ARMv7 or ARMv8 version of Ubuntu 16.04 or Debian 8 (will most likely work on other Linux based operating systems as well)
+*Python 3.4 or above
+*Camera or Video file
+*Install OpenCV or pip install opencv-python
+*Install Bokeh library or pip install bokeh
