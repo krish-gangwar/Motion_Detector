@@ -1,5 +1,5 @@
 # Motion_Detector
-Python/OpenCV script that detect motion on webcam and allow record it to a file and plot a graph for proper Visualization.
+Python/OpenCV script that detect motion on webcam and allows to record it and plot a graph for proper Visualization.
 
 ## Description ##
 ### The Process ###
