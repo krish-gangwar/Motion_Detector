@@ -6,51 +6,52 @@ status_list=[None,None]
 times=[]
 df=pandas.DataFrame(columns=["Start","End"])
 
-video=cv2.VideoCapture(0)
+video=cv2.VideoCapture(0)           # Opens Default Camera for capturing video
 
 while True:
-    check, frame = video.read()
+    check, frame = video.read()     # Check is a boolean to check if the video is running
     status=0
-    gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-    gray=cv2.GaussianBlur(gray,(21,21),0)
+    gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)     # Convert the frame to gray color
+    gray=cv2.GaussianBlur(gray,(21,21),0)   # Using Gaussian Blur to smooth it and remove noise and increase accuracy in calculation of difference
 
-    if first_frame is None:
+    if first_frame is None:                 # Store the first frame
         first_frame=gray
         continue
 
-    delta_frame=cv2.absdiff(first_frame,gray)
-    thresh_frame=cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]
-    thresh_frame=cv2.dilate(thresh_frame, None, iterations=2)
+    delta_frame=cv2.absdiff(first_frame,gray)  # Absolute Difference between the first frame and current frame
+    thresh_frame=cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]  # Comparison with a threshold value, if greater then 255 else 0
+    thresh_frame=cv2.dilate(thresh_frame, None, iterations=2)   # To smoothen the white areas and remove small black holes in the threshold frame
 
-    cnts,_ =cv2.findContours(thresh_frame.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts,_ =cv2.findContours(thresh_frame.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)  # Tuple of Contours, Retrieve External Contours (Boundaries)
 
     for contour in cnts:
         if cv2.contourArea(contour) < 10000:
             continue
         status=1
 
-        (x, y, w, h)=cv2.boundingRect(contour)
+        (x, y, w, h)=cv2.boundingRect(contour) # Bounding rectangle of green color around the contours, creates a tuple of x,y,w,h
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0,255,0), 3)
     status_list.append(status)
 
     status_list=status_list[-2:]
 
 
-    if status_list[-1]==1 and status_list[-2]==0:
+    if status_list[-1]==1 and status_list[-2]==0:  # When last item is 1 and 2nd last item is 0 
         times.append(datetime.now())
-    if status_list[-1]==0 and status_list[-2]==1:
+    if status_list[-1]==0 and status_list[-2]==1:  # When last item is 0 and 2nd last item is 1 
         times.append(datetime.now())
 
-
+    # To show all the frames
+    
     cv2.imshow("Gray Frame",gray)
     cv2.imshow("Delta Frame",delta_frame)
     cv2.imshow("Threshold Frame",thresh_frame)
     cv2.imshow("Color Frame",frame)
 
-    key=cv2.waitKey(1)
+    key=cv2.waitKey(1)      # Waits for a key to end (parameter is delay)
 
-    if key==ord('q'):
-        if status==1:
+    if key==ord('q'):       # If the key is 'q' then end
+        if status==1:       # If status is 1 then appends the current date and time
             times.append(datetime.now())
         break
 
